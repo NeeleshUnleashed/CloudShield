@@ -1,0 +1,48 @@
+# Secrets and Environment Variables
+.env
+*.pem
+*.key
+*.credential
+credentials
+id_rsa
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Local Mock Storage Data
+data/local_storage/
+data/*.db
+logs/*.log
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

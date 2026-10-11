@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloudShield — Autonomous Disaster Response & Supply Optimization</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <span class="logo-icon">🛡️</span>
+        <div>
+          <h1>CloudShield</h1>
+          <p class="tagline">Disaster Preparedness, Demand Prediction & Supply Allocation</p>
+        </div>
+      </div>
+      <div class="nav-controls">
+        <!-- Demo Role Selector -->
+        <div class="role-control-group">
+          <label for="roleSelector">Active Role:</label>
+          <select id="roleSelector" class="role-select">
+            <option value="EMERGENCY_OFFICER">👮 EMERGENCY_OFFICER (Propose)</option>
+            <option value="LOGISTICS_DIRECTOR" selected>🎖️ LOGISTICS_DIRECTOR (Approve)</option>
+            <option value="AUDITOR">👁️ AUDITOR (Read-Only)</option>
+          </select>
+        </div>
+
+        <div class="mode-badge" id="modeBadge">
+          <span class="status-dot"></span>
+          <span>AWS_MODE: <strong id="awsModeVal">mock</strong></span>
+        </div>
+        <button id="btnResetInv" class="btn btn-secondary">🔄 Reset Inventory</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <main class="main-content">
+    <!-- Top Row: Presets & Workflow Status -->
+    <section class="banner-card">
+      <div class="preset-group">
+        <span class="preset-label">⚡ Quick Scenarios:</span>
+        <button class="btn btn-sm" onclick="loadPreset('cyclone')">🌀 Cat-4 Cyclone (Coastal)</button>
+        <button class="btn btn-sm" onclick="loadPreset('quake')">🏚️ M7.2 Earthquake (Urban)</button>
+        <button class="btn btn-sm" onclick="loadPreset('flood')">🌊 Flash Flood (Delta)</button>
+        <button class="btn btn-sm" onclick="loadPreset('wildfire')">🔥 Extreme Bushfire (Gippsland)</button>
+      </div>
+      <div class="header-action-group">
+        <button id="btnRunMultiRegion" class="btn btn-sm btn-info" onclick="runMultiRegionDemo()">🌐 Multi-Region DPRI Ranking</button>
+        <div class="cost-notice">
+          <span>🔒 Zero Unexpected AWS Charges Enforced • Local Simulation Active</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Multi-Region Prioritization Panel (Expandable) -->
+    <section class="card" id="multiRegionPanel" style="display: none;">
+      <div class="card-header">
+        <h2>Multi-Region Comparative DPRI Prioritization</h2>
+        <button class="btn btn-sm" onclick="document.getElementById('multiRegionPanel').style.display='none'">✕ Close</button>
+      </div>
+      <div class="table-responsive">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Priority Rank</th>
+              <th>Incident Name</th>
+              <th>Target Region</th>
+              <th>Disaster Type</th>
+              <th>DPRI Score</th>
+              <th>Risk Tier</th>
+              <th>Logistics Urgency & Action</th>
+            </tr>
+          </thead>
+          <tbody id="multiRegionBody"></tbody>
+        </table>
+      </div>
+      <p id="multiRegionRationale" class="dpri-explanation" style="margin-top: 0.5rem;"></p>
+    </section>
+
+    <div class="dashboard-grid">
+      <!-- Left Column: Disaster Intake & Parameters -->
+      <div class="col-left">
+        <div class="card">
+          <div class="card-header">
+            <h2>1. Disaster Incident Intake</h2>
+            <span class="step-badge">Intake</span>
+          </div>
+          <form id="disasterForm">
+            <div class="form-group">
+              <label for="incidentName">Incident Name</label>
+              <input type="text" id="incidentName" required value="Operation Coral Storm" placeholder="e.g. Cyclone Olivia">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="disasterType">Disaster Type</label>
+                <select id="disasterType">
+                  <option value="CYCLONE">CYCLONE</option>
+                  <option value="EARTHQUAKE">EARTHQUAKE</option>
+                  <option value="FLOOD">FLOOD</option>
+                  <option value="WILDFIRE">WILDFIRE</option>
+                  <option value="LANDSLIDE">LANDSLIDE</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="region">Target Region</label>
+                <input type="text" id="region" required value="Far North Coast" placeholder="e.g. Northern Valley">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="affectedPop">Affected Population</label>
+                <input type="number" id="affectedPop" required value="18000" min="10">
+              </div>
+              <div class="form-group">
+                <label for="displacedPop">Displaced Persons</label>
+                <input type="number" id="displacedPop" required value="6500" min="0">
+              </div>
+            </div>
+
+            <!-- Severity Sliders -->
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Hazard Intensity</label>
+                <span id="hazardVal" class="slider-value">0.85</span>
+              </div>
+              <input type="range" id="hazard" min="0.1" max="1.0" step="0.05" value="0.85">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Vulnerability Score</label>
+                <span id="vulnVal" class="slider-value">0.70</span>
+              </div>
+              <input type="range" id="vulnerability" min="0.0" max="1.0" step="0.05" value="0.70">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Local Coping Capacity</label>
+                <span id="copingVal" class="slider-value">0.40</span>
+              </div>
+              <input type="range" id="coping" min="0.05" max="1.0" step="0.05" value="0.40">
+            </div>
+
+            <div class="slider-group">
+              <div class="slider-header">
+                <label>Infrastructure Logistics Damage</label>
+                <span id="infraVal" class="slider-value">0.75</span>
+              </div>
+              <input type="range" id="infra" min="0.0" max="1.0" step="0.05" value="0.75">
+            </div>
+
+            <!-- Two-Stage Actions -->
+            <div class="btn-cluster">
+              <button type="button" id="btnProposeWorkflow" class="btn btn-primary btn-block">
+                📝 1. Submit Allocation Proposal (Human-in-the-Loop)
+              </button>
+              <button type="submit" id="btnExecuteWorkflow" class="btn btn-secondary btn-block" style="margin-top: 0.5rem;">
+                ⚡ Fast Auto-Approve (Single-Click Demo)
+              </button>
+            </div>
+            <p class="role-hint">Stage 1 creates proposal with status <code>PENDING_APPROVAL</code> without deducting stock.</p>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Real-time Execution Pipeline -->
+      <div class="col-right">
+        <!-- Human-in-the-Loop Authorization Gate Card -->
+        <div class="card approval-gate-card" id="approvalGateCard">
+          <div class="card-header">
+            <h2>Human-in-the-Loop Authorization Gate</h2>
+            <span id="proposalStatusBadge" class="badge badge-neutral">Awaiting Submission</span>
+          </div>
+          <div class="approval-bar">
+            <div><strong>Active Incident ID:</strong> <span id="activeIncId" class="code-span">--</span></div>
+            <div><strong>Created By:</strong> <span id="createdRoleBadge" class="badge badge-info">--</span></div>
+            <div><strong>Approver:</strong> <span id="approvedRoleBadge" class="badge badge-neutral">--</span></div>
+          </div>
+          <div id="approvalActionCluster" class="approval-action-cluster" style="display: none; margin-top: 0.75rem;">
+            <button id="btnApproveDispatch" class="btn btn-success">✅ Authorize & Dispatch (Logistics Director)</button>
+            <button id="btnRejectDispatch" class="btn btn-danger">❌ Reject Proposal</button>
+            <span class="gate-hint">Protected by backend RBAC. Officers or Auditors will be rejected with 403 Forbidden.</span>
+          </div>
+        </div>
+
+        <!-- Step 2: DPRI Result Card -->
+        <div class="card" id="dpriCard">
+          <div class="card-header">
+            <h2>2. DPRI Index Calculation</h2>
+            <span id="dpriRiskBadge" class="badge badge-neutral">Awaiting Execution</span>
+          </div>
+          <div class="dpri-display">
+            <div class="dpri-meter">
+              <span class="dpri-value" id="dpriScoreText">--</span>
+              <span class="dpri-label">DPRI SCORE (0.0 - 1.0)</span>
+            </div>
+            <div class="dpri-factors">
+              <div class="factor-row"><span>Hazard Intensity:</span> <strong id="dpriHazard">--</strong></div>
+              <div class="factor-row"><span>Vulnerability:</span> <strong id="dpriVuln">--</strong></div>
+              <div class="factor-row"><span>Coping Deficit:</span> <strong id="dpriCoping">--</strong></div>
+              <div class="factor-row"><span>Logistics Penalty:</span> <strong id="dpriInfra">--</strong></div>
+            </div>
+          </div>
+          <p class="dpri-explanation" id="dpriExplanation">Execute workflow to calculate real-time vulnerability & disaster index.</p>
+        </div>
+
+        <!-- Step 3 & 4: Demand Forecast & Shortages -->
+        <div class="card" id="demandCard">
+          <div class="card-header">
+            <h2>3 & 4. Demand Prediction & Shortage Analysis</h2>
+            <span id="fulfillmentBadge" class="badge badge-neutral">--</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="shortageTable">
+              <thead>
+                <tr>
+                  <th>Relief Supply</th>
+                  <th>Predicted Demand</th>
+                  <th>Available Network</th>
+                  <th>Shortage</th>
+                  <th>Fulfillment</th>
+                </tr>
+              </thead>
+              <tbody id="shortageBody">
+                <tr><td colspan="5" class="empty-cell">No active disaster calculation yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 5: Multi-Depot Dispatch Manifest -->
+        <div class="card" id="dispatchCard">
+          <div class="card-header">
+            <h2>5. Optimized Depot Dispatch Allocation</h2>
+            <span class="step-badge">Manifest</span>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table" id="dispatchTable">
+              <thead>
+                <tr>
+                  <th>Depot Origin</th>
+                  <th>Relief Item</th>
+                  <th>Quantity Dispatched</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="dispatchBody">
+                <tr><td colspan="4" class="empty-cell">Dispatch manifests will generate upon calculation.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 6: Simulated SNS Emergency Alert -->
+        <div class="card alert-card" id="snsCard">
+          <div class="card-header">
+            <h2>6. AWS SNS Emergency Broadcast</h2>
+            <span class="badge badge-warning" id="snsBadge">Simulated (Mock Mode)</span>
+          </div>
+          <div class="sns-meta">
+            <div><strong>Topic:</strong> <span id="snsTopic" class="code-span">arn:aws:sns:ap-southeast-2:206238482111:CloudShield-Disaster-Alerts</span></div>
+            <div><strong>Message ID:</strong> <span id="snsMsgId" class="code-span">--</span></div>
+            <div><strong>Timestamp:</strong> <span id="snsTime">--</span></div>
+          </div>
+          <pre class="sns-body" id="snsBodyText">SNS broadcast payload will appear here upon dispatch authorization.</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Disaster & Dispatch Audit History Table -->
+    <section class="card full-width-card">
+      <div class="card-header">
+        <h2>Disaster & Dispatch Lifecycle Audit History</h2>
+        <span class="badge badge-info">Persistent Audit Trail</span>
+      </div>
+      <div class="table-responsive">
+        <table class="data-table" id="historyTable">
+          <thead>
+            <tr>
+              <th>Incident ID</th>
+              <th>Incident Name</th>
+              <th>Region</th>
+              <th>Disaster Type</th>
+              <th>DPRI Score</th>
+              <th>Risk Level</th>
+              <th>Status</th>
+              <th>Created By</th>
+              <th>Authorized By</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+            <tr><td colspan="10" class="loading-cell">Loading audit history...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Bottom Full Width: Warehouse Inventory Matrix -->
+    <section class="card full-width-card">
+      <div class="card-header">
+        <h2>7. Regional Depot Live Inventory Store</h2>
+        <span class="badge badge-info">SQLite Local Database</span>
+      </div>
+      <div class="table-responsive">
+        <table class="data-table" id="inventoryTable">
+          <thead>
+            <tr>
+              <th>Depot ID</th>
+              <th>Warehouse Name</th>
+              <th>Location</th>
+              <th>Category</th>
+              <th>Item Name</th>
+              <th>Stock Available</th>
+              <th>Unit</th>
+            </tr>
+          </thead>
+          <tbody id="inventoryBody">
+            <tr><td colspan="7" class="loading-cell">Loading inventory...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>CloudShield © 2026 • Local-First Autonomous Disaster Logistics Engine • Zero AWS Charges Guaranteed</p>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>
