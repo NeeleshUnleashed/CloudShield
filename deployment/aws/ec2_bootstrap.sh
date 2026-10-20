@@ -12,7 +12,8 @@ echo "=================================================================="
 # 1. Update OS and install runtime dependencies
 echo "[1/7] Installing OS packages..."
 dnf update -y
-dnf install -y python3.11 python3.11-pip git sqlite amazon-cloudwatch-agent
+dnf install -y python3.11 python3.11-pip git sqlite amazon-cloudwatch-agent cronie
+systemctl enable --now crond || true
 
 # 2. Clone repository
 echo "[2/7] Cloning CloudShield repository..."
@@ -52,10 +53,13 @@ echo "[5/7] Configuring hourly S3 backup..."
 cp "${APP_DIR}/deployment/aws/cloudshield-backup.sh" /usr/local/bin/cloudshield-backup.sh
 chmod +x /usr/local/bin/cloudshield-backup.sh
 
+mkdir -p /etc/cron.d
 cat << 'EOF' > /etc/cron.d/cloudshield-backup
 0 * * * * root /usr/local/bin/cloudshield-backup.sh >> /var/log/cloudshield-backup.log 2>&1
 EOF
 chmod 644 /etc/cron.d/cloudshield-backup
+/usr/local/bin/cloudshield-backup.sh || echo "Initial backup deferred."
+
 
 # 6. Configure CloudWatch Agent for centralized logging
 echo "[6/7] Configuring CloudWatch Logs..."
