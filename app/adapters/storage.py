@@ -42,7 +42,7 @@ class S3StorageAdapter(BaseStorageAdapter):
         try:
             import boto3
             s3 = boto3.client("s3", region_name=settings.AWS_REGION)
-            bucket_name = f"cloudshield-artifacts-{settings.AWS_REGION}"
+            bucket_name = settings.S3_BUCKET_NAME
             s3.put_object(
                 Bucket=bucket_name,
                 Key=filename,
@@ -58,7 +58,7 @@ class S3StorageAdapter(BaseStorageAdapter):
             raise RuntimeError("Live S3 access blocked in mock mode.")
         import boto3
         s3 = boto3.client("s3", region_name=settings.AWS_REGION)
-        bucket_name = f"cloudshield-artifacts-{settings.AWS_REGION}"
+        bucket_name = settings.S3_BUCKET_NAME
         res = s3.get_object(Bucket=bucket_name, Key=filename)
         return res["Body"].read()
 

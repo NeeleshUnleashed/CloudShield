@@ -1,0 +1,40 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "CloudShieldSNSPublish",
+      "Effect": "Allow",
+      "Action": [
+        "sns:Publish"
+      ],
+      "Resource": "arn:aws:sns:ap-southeast-2:206238482111:CloudShield-Disaster-Alerts"
+    },
+    {
+      "Sid": "CloudShieldS3Access",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::cloudshield-artifacts-206238482111-ap-southeast-2",
+        "arn:aws:s3:::cloudshield-artifacts-206238482111-ap-southeast-2/*"
+      ]
+    },
+    {
+      "Sid": "CloudShieldCloudWatchLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams"
+      ],
+      "Resource": [
+        "arn:aws:logs:ap-southeast-2:206238482111:log-group:/cloudshield/application",
+        "arn:aws:logs:ap-southeast-2:206238482111:log-group:/cloudshield/application:*"
+      ]
+    }
+  ]
+}
