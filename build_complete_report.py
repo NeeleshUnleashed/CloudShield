@@ -316,80 +316,9 @@ def build_story(toc_data=None):
     story.append(PageBreak())
 
     # =========================================================================
-    # PAGE 2: DECLARATION (EXACT MATCH TO REFERENCE PDF)
+    # PAGE 2: TABLE OF CONTENTS (EXACT 3-COLUMN TABLE MATCHING REFERENCE PDF)
     # =========================================================================
-    dec_title_style = ParagraphStyle('DecTitle', fontName='Times-Bold', fontSize=14, leading=18, alignment=1, textColor=colors.black)
-    story.append(Paragraph("DECLARATION", dec_title_style))
-    story.append(Spacer(1, 16))
-
-    story.append(Paragraph(
-        "I hereby declare that the capstone project report titled \"A Practical Cloud Architecture Design: CloudShield — "
-        "Predictive Disaster Resource and Logistic Allocation System\", submitted in partial fulfillment of the requirements "
-        "for BCSE355L – Cloud Architecture Design, is my original work.",
-        style_body
-    ))
-    story.append(Spacer(1, 4))
-    story.append(Paragraph(
-        "I affirm that this report has been prepared collaboratively and has not been submitted, either in part or in full, "
-        "to any other course, institution, or university for the award of any degree, diploma, or academic certification.",
-        style_body
-    ))
-    story.append(Spacer(1, 4))
-    story.append(Paragraph("I further declare that:", style_body))
-    story.append(Spacer(1, 4))
-
-    story.append(Paragraph(
-        "&bull;&nbsp;&nbsp;All sources of technical information, system architectures, and cloud service documentation have been "
-        "acknowledged and cited using standard academic referencing.",
-        style_bullet
-    ))
-    story.append(Paragraph(
-        "&bull;&nbsp;&nbsp;Figures, structural diagrams, benchmark scripts, and analytical models taken from external sources or "
-        "technical literature are appropriately credited and documented.",
-        style_bullet
-    ))
-    story.append(Paragraph(
-        "&bull;&nbsp;&nbsp;The architectural analysis, algorithmic breakdown, and technical evaluation represent my own conceptual "
-        "understanding and academic synthesis, except where explicitly stated.",
-        style_bullet
-    ))
-    story.append(Paragraph(
-        "&bull;&nbsp;&nbsp;Any academic or technical assistance received during the conceptualization, execution, and preparation "
-        "of this report has been duly acknowledged.",
-        style_bullet
-    ))
-    story.append(Spacer(1, 22))
-
-    meta_dec_style = ParagraphStyle('MetaDec', fontName='Times-Roman', fontSize=11, leading=16, textColor=colors.black)
-    meta_dec_bold = ParagraphStyle('MetaDecBold', fontName='Times-Bold', fontSize=11, leading=16, textColor=colors.black)
-    
-    story.append(Paragraph("<b>Student Name:</b>&nbsp;&nbsp;&nbsp;&nbsp;Neelesh A", meta_dec_style))
-    story.append(Paragraph("<b>Register Number:</b>&nbsp;&nbsp;24BIT0437", meta_dec_style))
-    story.append(Spacer(1, 16))
-
-    story.append(Paragraph("<b>Signature:</b>", meta_dec_bold))
-    story.append(Spacer(1, 6))
-
-    sig_img_path = "e:/cloud/docs/screenshots/neelesh_signature.png"
-    if os.path.exists(sig_img_path):
-        # 110 pt wide, 43.6 pt tall (aspect ratio 479x190)
-        img_sig = Image(sig_img_path, width=110, height=43.6)
-        t_sig = Table([[img_sig]], colWidths=[504])
-        t_sig.setStyle(TableStyle([
-            ('ALIGN', (0,0), (-1,-1), 'LEFT'),
-            ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-            ('BOTTOMPADDING', (0,0), (-1,-1), 0),
-            ('TOPPADDING', (0,0), (-1,-1), 0),
-            ('LEFTPADDING', (0,0), (-1,-1), 0),
-        ]))
-        story.append(t_sig)
-
-    # End of Page 2
-    story.append(PageBreak())
-
-    # =========================================================================
-    # PAGE 3: TABLE OF CONTENTS (EXACT 3-COLUMN TABLE MATCHING REFERENCE PDF)
-    # =========================================================================
+    dec_title_style = ParagraphStyle('DecTitleStyle', fontName='Times-Bold', fontSize=14, leading=18, alignment=1, textColor=colors.black)
     story.append(Paragraph("TABLE OF CONTENTS", dec_title_style))
     story.append(Spacer(1, 14))
 

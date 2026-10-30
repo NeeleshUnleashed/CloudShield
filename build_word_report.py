@@ -318,120 +318,54 @@ def build_word_document(output_docx_path="e:/cloud/CloudShield_Complete_Project_
     doc.add_page_break()
 
     # =========================================================================
-    # PAGE 2: DECLARATION (EXACT MATCH)
+    # PAGE 2: TABLE OF CONTENTS (EXACT 3-COLUMN TABLE)
     # =========================================================================
-    print("[*] Generating Page 2: Declaration...")
-    p_dh = doc.add_paragraph("DECLARATION", style='Heading 1')
-    p_dh.paragraph_format.space_after = Pt(16)
-
-    p_d1 = doc.add_paragraph()
-    p_d1.paragraph_format.line_spacing = 1.15
-    p_d1.paragraph_format.space_after = Pt(6)
-    p_d1.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-    add_html_to_paragraph(
-        p_d1,
-        "I hereby declare that the capstone project report titled \"A Practical Cloud Architecture Design: CloudShield — "
-        "Predictive Disaster Resource and Logistic Allocation System\", submitted in partial fulfillment of the requirements "
-        "for BCSE355L – Cloud Architecture Design, is my original work."
-    )
-
-    p_d2 = doc.add_paragraph()
-    p_d2.paragraph_format.line_spacing = 1.15
-    p_d2.paragraph_format.space_after = Pt(6)
-    p_d2.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-    add_html_to_paragraph(
-        p_d2,
-        "I affirm that this report has been prepared collaboratively and has not been submitted, either in part or in full, "
-        "to any other course, institution, or university for the award of any degree, diploma, or academic certification."
-    )
-
-    p_d3 = doc.add_paragraph("I further declare that:")
-    p_d3.paragraph_format.space_after = Pt(4)
-
-    dec_bullets = [
-        "All sources of technical information, system architectures, and cloud service documentation have been acknowledged and cited using standard academic referencing.",
-        "Figures, structural diagrams, benchmark scripts, and analytical models taken from external sources or technical literature are appropriately credited and documented.",
-        "The architectural analysis, algorithmic breakdown, and technical evaluation represent my own conceptual understanding and academic synthesis, except where explicitly stated.",
-        "Any academic or technical assistance received during the conceptualization, execution, and preparation of this report has been duly acknowledged."
-    ]
-
-    for b in dec_bullets:
-        pb = doc.add_paragraph()
-        pb.paragraph_format.left_indent = Inches(0.25)
-        pb.paragraph_format.space_after = Pt(4)
-        pb.paragraph_format.line_spacing = 1.15
-        pb.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
-        add_html_to_paragraph(pb, f"&bull;&nbsp;&nbsp;{b}")
-
-    p_sp = doc.add_paragraph()
-    p_sp.paragraph_format.space_before = Pt(18)
-    p_sp.paragraph_format.space_after = Pt(0)
-
-    p_meta = doc.add_paragraph()
-    p_meta.paragraph_format.space_after = Pt(14)
-    add_html_to_paragraph(p_meta, "<b>Student Name:</b>&nbsp;&nbsp;&nbsp;&nbsp;Neelesh A<br/><b>Register Number:</b>&nbsp;&nbsp;24BIT0437")
-
-    p_sig_l = doc.add_paragraph()
-    p_sig_l.paragraph_format.space_after = Pt(6)
-    add_html_to_paragraph(p_sig_l, "<b>Signature:</b>")
-
-    sig_img_path = "e:/cloud/docs/screenshots/neelesh_signature.png"
-    if os.path.exists(sig_img_path):
-        p_sig_img = doc.add_paragraph()
-        p_sig_img.paragraph_format.space_after = Pt(0)
-        p_sig_img.add_run().add_picture(sig_img_path, width=Inches(1.5))
-
-    doc.add_page_break()
-
-    # =========================================================================
-    # PAGE 3: TABLE OF CONTENTS (EXACT 3-COLUMN TABLE)
-    # =========================================================================
-    print("[*] Generating Page 3: Table of Contents...")
+    print("[*] Generating Page 2: Table of Contents...")
     p_th = doc.add_paragraph("TABLE OF CONTENTS", style='Heading 1')
     p_th.paragraph_format.space_after = Pt(14)
 
     toc_raw = [
-        ("1", "<b>Abstract</b>", "4"),
+        ("1", "<b>Abstract</b>", "3"),
         ("2", "<b>Chapter 1: The Humanistic Imperative: Disaster Reality & The Genesis of CloudShield</b><br/>"
               "1.1 The Lived Reality of Acute Climate Catastrophes; 1.2 The Emotional and Operational Fracture; "
-              "1.3 Shifting the Paradigm; 1.4 Ethical Principles of Algorithmic Humanitarianism; 1.5 Comparative Case Study Analysis", "5"),
+              "1.3 Shifting the Paradigm; 1.4 Ethical Principles of Algorithmic Humanitarianism; 1.5 Comparative Case Study Analysis", "4"),
         ("3", "<b>Chapter 2: Structural Gaps and Pathologies in Traditional Emergency Logistics</b><br/>"
               "2.1 The 'Last-Mile Void'; 2.2 The Pathology of Spreadsheet Logistics; 2.3 The Fatal 'Route Pruning' Fallacy; "
-              "2.4 Distributive Inequity and Panic Dispatching; 2.5 Information Cascades and Resource Hoarding", "8"),
+              "2.4 Distributive Inequity and Panic Dispatching; 2.5 Information Cascades and Resource Hoarding", "7"),
         ("4", "<b>Chapter 3: Intellectual Property & Core Technical Novelty (IDF-B Alignment)</b><br/>"
               "3.1 Institutional IP Alignment (Doc No. 02-IPR-R003); 3.2 Novelty 1: Version-Linked Snapshots; "
               "3.3 Novelty 2: Decoupled Need Urgency & Route Feasibility; 3.4 Novelty 3: Two-Stage Plan-Commit Protocol; "
-              "3.5 Novelty 4: Sphere International Standards Calibration", "10"),
+              "3.5 Novelty 4: Sphere International Standards Calibration", "9"),
         ("5", "<b>Chapter 4: Mathematical Foundations & Sphere Minimum Survival Standards</b><br/>"
               "4.1 Disaster Priority and Relief Index (DPRI) Derivation; 4.2 Sphere Minimum Survival Standards; "
-              "4.3 Potable Water Logistics; 4.4 Nutritional Baselines & Pediatric Vulnerabilities", "13"),
+              "4.3 Potable Water Logistics; 4.4 Nutritional Baselines & Pediatric Vulnerabilities", "12"),
         ("6", "<b>Chapter 5: Algorithmic Logistics Optimization: The Multi-Depot Knapsack Engine</b><br/>"
               "5.1 Constrained Multi-Facility Formulation; 5.2 Distance Decay & Road Impairment Transit Modeling; "
-              "5.3 Greedy Priority Knapsack Solver; 5.4 Buffer Non-Depletion Invariants; 5.5 Non-Linear Convoy Congestion Modeling", "16"),
+              "5.3 Greedy Priority Knapsack Solver; 5.4 Buffer Non-Depletion Invariants; 5.5 Non-Linear Convoy Congestion Modeling", "15"),
         ("7", "<b>Chapter 6: Two-Stage Human-in-the-Loop Governance & State Machine Architecture</b><br/>"
               "6.1 Ethical Rationale for Human Oversight; 6.2 Formal State Machine Model; 6.3 Cryptographic Action ID Idempotency; "
-              "6.4 Immutable Audit Ledger & Non-Repudiation", "19"),
+              "6.4 Immutable Audit Ledger & Non-Repudiation", "18"),
         ("8", "<b>Chapter 7: Comprehensive AWS Cloud Architecture: Service-by-Service Deep Dive</b><br/>"
               "7.1 Cloud Architectural Philosophy; 7.2 Amazon EC2 Compute Engine; 7.3 Amazon EBS Storage; "
               "7.4 Amazon S3 Artifact Vault; 7.5 Amazon SNS Incident Notification; 7.6 Amazon CloudWatch Logging; "
-              "7.7 AWS IAM Role Security; 7.8 VPC & Security Group Isolation", "21"),
+              "7.7 AWS IAM Role Security; 7.8 VPC & Security Group Isolation", "20"),
         ("9", "<b>Chapter 8: AWS Production Deployment, Operational Hardening & Rigorous Cost Audit</b><br/>"
               "8.1 Sydney Region (ap-southeast-2) Deployment; 8.2 Rigorous AWS Cost-Safety Audit; "
-              "8.3 Safe Resource Teardown Protocol; 8.4 Multi-Cloud Standby & SLA Analysis", "25"),
+              "8.3 Safe Resource Teardown Protocol; 8.4 Multi-Cloud Standby & SLA Analysis", "24"),
         ("10", "<b>Chapter 9: End-to-End Frontend Interface & Live Operational Demonstration</b><br/>"
                "9.1 Crisis Command UI Engineering; 9.2 Real-Time Intake & DPRI Heatmap; "
                "9.3 Sphere Shortage & Multi-Depot Manifest; 9.4 Single-Pane Command Overview; "
-               "9.5 Approval Action Card & SNS Alert; 9.6 Interactive Swagger API Docs", "27"),
+               "9.5 Approval Action Card & SNS Alert; 9.6 Interactive Swagger API Docs", "26"),
         ("11", "<b>Chapter 10: Performance Profiling, Latency Benchmarking & Scalability Roadmap</b><br/>"
                "10.1 Empirical Performance Profiling; 10.2 In-Memory Caching via Amazon ElastiCache Redis; "
                "10.3 Global Edge Acceleration via CloudFront CDN & WAF; 10.4 Asynchronous SQS & Lambda Decoupling; "
-               "10.5 Distributed Mutual Exclusion via Redlock", "33"),
+               "10.5 Distributed Mutual Exclusion via Redlock", "32"),
         ("12", "<b>Chapter 11: Future Scope, Remote Sensing & Edge Mesh Frontiers</b><br/>"
                "11.1 Synthetic Aperture Radar (SAR) Telemetry; 11.2 Dynamic Road Graph Invalidation; "
                "11.3 Offline Edge Deployments via AWS Snowcone; 11.4 Multimodal Conversational AI Field Triage; "
-               "11.5 UAV Drone Swarm Air-Drop Integration", "35"),
-        ("13", "<b>References</b><br/>Exhaustive Academic Bibliographic References (MLA Format)", "38"),
-        ("14", "<b>Appendices</b><br/>Source Excerpts (DPRI, Knapsack, Action ID), Build & Run Summary, System Screenshots", "39"),
+               "11.5 UAV Drone Swarm Air-Drop Integration", "34"),
+        ("13", "<b>References</b><br/>Exhaustive Academic Bibliographic References (MLA Format)", "37"),
+        ("14", "<b>Appendices</b><br/>Source Excerpts (DPRI, Knapsack, Action ID), Build & Run Summary, System Screenshots", "38"),
     ]
 
     t_toc = doc.add_table(len(toc_raw) + 1, 3)
